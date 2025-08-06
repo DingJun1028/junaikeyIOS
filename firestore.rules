@@ -1,0 +1,117 @@
+rules_version = '2';
+
+/**
+ * 萬能安全域 - Universal Security Domain
+ * Firebase Firestore 安全規則
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 藍圖集合 - 允許認證用戶讀寫
+    match /blueprints/{blueprintId} {
+      allow read, write: if request.auth != null;
+      allow create: if request.auth != null 
+        && validateBlueprintData(request.resource.data);
+      allow update: if request.auth != null 
+        && validateBlueprintUpdate(resource.data, request.resource.data);
+    }
+    
+    // 智慧卡集合 - 允許認證用戶讀取，系統寫入
+    match /wisdomCards/{cardId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null || isSystemRequest();
+    }
+    
+    // 網絡事件 - 只允許讀取
+    match /networkEvents/{eventId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 代理狀態 - 只讀
+    match /agentStatus/{agentId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 數據提純記錄 - 系統管理
+    match /dataRefinements/{refinementId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 提純日誌 - 系統管理
+    match /purificationLogs/{logId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 智慧洞察 - 認證用戶可讀
+    match /wisdomInsights/{insightId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 系統健康記錄 - 只讀
+    match /systemHealth/{healthId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 事件統計 - 只讀
+    match /eventStatistics/{statId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 恢復嘗試記錄 - 系統管理
+    match /recoveryAttempts/{attemptId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 通知集合 - 用戶可讀寫自己的通知
+    match /notifications/{notificationId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // 用戶配置 - 用戶只能訪問自己的配置
+    match /userConfigs/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 系統配置 - 只讀
+    match /systemConfigs/{configId} {
+      allow read: if request.auth != null;
+      allow write: if isSystemRequest();
+    }
+    
+    // 默認拒絕規則
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+  
+  // 輔助函數：驗證是否為系統請求
+  function isSystemRequest() {
+    return request.auth != null && 
+           (request.auth.token.admin == true || 
+            request.auth.uid == 'system-service-account');
+  }
+  
+  // 輔助函數：驗證藍圖數據
+  function validateBlueprintData(data) {
+    return data.keys().hasAll(['name', 'type', 'status']) &&
+           data.name is string && data.name.size() > 0 &&
+           data.type is string && data.type.size() > 0 &&
+           data.status in ['draft', 'active', 'archived'];
+  }
+  
+  // 輔助函數：驗證藍圖更新
+  function validateBlueprintUpdate(oldData, newData) {
+    // 確保核心字段不會被惡意修改
+    return newData.name == oldData.name &&
+           newData.type == oldData.type &&
+           newData.createdBy == oldData.createdBy;
+  }
+}
