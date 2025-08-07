@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card } from './Card';
+import { CapacitiesViewer } from './CapacitiesViewer';
 import { useAgentNetwork } from '../hooks/useAgentNetwork';
 import { useFirestore } from '../hooks/useFirestore';
 import './Dashboard.css';
@@ -196,6 +197,17 @@ export const Dashboard: React.FC = () => {
                 ]}
               />
             ))}
+          </div>
+        </section>
+
+        <section className="dashboard-section capacities-section">
+          <h2>📚 Capacities 智典預覽</h2>
+          <div className="capacities-preview">
+            <CapacitiesViewer
+              height="400px"
+              showHeader={false}
+              autoLoad={true}
+            />
           </div>
         </section>
       </div>

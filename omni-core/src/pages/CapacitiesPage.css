@@ -1,0 +1,227 @@
+.capacities-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
+  padding: 20px;
+}
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  grid-template-areas: 
+    "header header"
+    "main sidebar";
+}
+
+/* 頁面頭部 */
+.page-header {
+  grid-area: header;
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.header-content h1 {
+  font-size: 3em;
+  color: white;
+  margin: 0 0 16px 0;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+.header-description {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 主要內容區域 */
+.page-main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewer-container {
+  flex: 1;
+  min-height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* 側邊欄 */
+.page-sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-section {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 24px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-section h3 {
+  color: white;
+  font-size: 1.3em;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+/* 功能列表 */
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8px 0;
+  font-size: 1em;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-list li:last-child {
+  border-bottom: none;
+}
+
+/* 使用說明列表 */
+.instruction-list {
+  padding-left: 20px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.instruction-list li {
+  padding: 6px 0;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+/* 技術資訊 */
+.tech-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.info-value {
+  color: white;
+  font-size: 0.9em;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* 響應式設計 */
+@media (max-width: 1200px) {
+  .page-container {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "main"
+      "sidebar";
+  }
+  
+  .page-sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 16px;
+  }
+  
+  .sidebar-section {
+    min-width: 280px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .capacities-page {
+    padding: 10px;
+  }
+  
+  .page-container {
+    gap: 16px;
+  }
+  
+  .page-header {
+    padding: 24px 16px;
+  }
+  
+  .header-content h1 {
+    font-size: 2.2em;
+  }
+  
+  .header-description {
+    font-size: 1.1em;
+  }
+  
+  .viewer-container {
+    min-height: 500px;
+  }
+  
+  .page-sidebar {
+    flex-direction: column;
+  }
+  
+  .sidebar-section {
+    min-width: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 1.8em;
+  }
+  
+  .header-description {
+    font-size: 1em;
+  }
+  
+  .viewer-container {
+    min-height: 400px;
+  }
+  
+  .sidebar-section {
+    padding: 16px;
+  }
+}
