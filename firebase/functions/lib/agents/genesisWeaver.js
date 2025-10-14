@@ -13,12 +13,14 @@ if (!admin.apps.length) {
 }
 exports.genesisWeaver = functions.https.onCall(async (data, context) => {
     var _a, _b, _c;
-    const { blueprintName, initialData, action } = data;
+    const { blueprintName, initialData, action, blueprintId } = data;
     const db = admin.firestore();
     try {
         if (action === 'activate') {
             // 激活現有藍圖
-            const { blueprintId } = data;
+            if (!blueprintId) {
+                throw new Error('Blueprint ID is required for activation');
+            }
             await db.collection('blueprints').doc(blueprintId).update({
                 status: 'active',
                 activatedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -41,6 +43,9 @@ exports.genesisWeaver = functions.https.onCall(async (data, context) => {
         }
         else {
             // 創建新藍圖
+            if (!blueprintName) {
+                throw new Error('Blueprint name is required');
+            }
             const blueprintData = {
                 name: blueprintName,
                 ...initialData,
@@ -75,24 +80,25 @@ exports.genesisWeaver = functions.https.onCall(async (data, context) => {
     }
     catch (error) {
         console.error('Genesis Weaver Error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         // 觸發混沌提純事件卡
         const errorCard = {
             type: 'chaos_detected',
             agentId: 'genesisWeaver',
             timestamp: admin.firestore.FieldValue.serverTimestamp(),
             payload: {
-                error: error.message,
+                error: errorMessage,
                 blueprintName,
                 action: action || 'create'
             },
             status: 'failed'
         };
         await db.collection('networkEvents').add(errorCard);
-        await updateAgentStatus('genesisWeaver', 'error', `Error: ${error.message}`);
+        await updateAgentStatus('genesisWeaver', 'error', `Error: ${errorMessage}`);
         return {
             status: 'error',
             message: 'Failed to process blueprint.',
-            error: error.message
+            error: errorMessage
         };
     }
 });

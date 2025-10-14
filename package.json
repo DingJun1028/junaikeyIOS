@@ -1,0 +1,21 @@
+{
+  "name": "junaikey-workspace",
+  "version": "1.0.0",
+  "description": "JunAiKey Universal Wisdom System - Multi-project workspace",
+  "private": true,
+  "workspaces": [
+    "omni-core",
+    "firebase/functions"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=omni-core",
+    "build": "npm run build --workspaces --if-present",
+    "build:omni": "npm run build --workspace=omni-core",
+    "build:functions": "npm run build --workspace=firebase/functions",
+    "lint": "npm run lint --workspaces --if-present",
+    "install:all": "npm install --workspaces"
+  },
+  "keywords": ["firebase", "react", "typescript", "universal", "wisdom", "system"],
+  "author": "Universal Wisdom System",
+  "license": "ISC"
+}
