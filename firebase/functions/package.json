@@ -17,7 +17,7 @@
   "description": "萬能智典系統 Firebase Cloud Functions - 智能代理網絡後端服務",
   "dependencies": {
     "@types/node": "^24.2.0",
-    "firebase-admin": "^13.4.0",
+    "firebase-admin": "^13.6.0",
     "firebase-functions": "^6.4.0",
     "typescript": "^5.9.2"
   },
